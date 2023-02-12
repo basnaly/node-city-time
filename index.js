@@ -1,8 +1,20 @@
 #!/usr/bin/env node
 
-const inquirer = require("inquirer")
+require('dotenv').config()
+const http = require("http")
+const cityTimezones = require('city-timezones');
 
-var cityTimezones = require('city-timezones');
+const server = http.createServer((req, res) => {
+	res.writeHead(200, { "Content-Type": "text/plain" })
+	const result = main(req.url.replace('/', ''))
+	res.end(result)
+})
+
+const PORT = process.env.PORT
+
+server.listen(PORT, () => {
+	console.log(`Server is running on port ${PORT}`)
+})
 
 const main = (cityName) => {
  
@@ -16,14 +28,12 @@ const main = (cityName) => {
 		minute: "2-digit",
 		second: "2-digit",
 	});;
-	console.log(`The time in Israel is ${israelTime}`);
-
+	const israelTimeDisplay = `The time in Israel is ${israelTime}`;
 
 	const cityLookup = cityTimezones.lookupViaCity(cityName)
 
 	if (cityLookup.length === 0) {
-		console.log(`The city ${cityName} wasn't found`)
-		return
+		return `The city ${cityName} wasn't found`
 	} 
 
 	const cityTime = new Date().toLocaleString("en-UK", {
@@ -36,15 +46,8 @@ const main = (cityName) => {
 		minute: "2-digit",
 		second: "2-digit",
 	});
-	console.log(`The time in ${cityLookup[0].country}/${cityLookup[0].city} is ${cityTime}`);
-};
 
-const prompt = inquirer.createPromptModule()
-prompt([{
-	type: "input",
-	name: "city",
-	message: "Enter a city name to view its country, date and time"
-}]).then(answers => {
-	const city = answers.city
-	main(city);
-})
+	const cityTimeDisplay = `The time in ${cityLookup[0].country}/${cityLookup[0].city} is ${cityTime}`
+
+		return israelTimeDisplay + ' \n' + cityTimeDisplay
+};
