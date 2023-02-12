@@ -16,6 +16,7 @@
     "city-timezones": "^1.2.1",
     "dotenv": "^16.0.3",
     "inquirer": "^8.2.5",
+    "nodemon": "^2.0.20",
     "yargs": "^17.6.2"
   }
 }
