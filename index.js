@@ -6,7 +6,7 @@ const cityTimezones = require('city-timezones');
 
 const server = http.createServer((req, res) => {
 	res.writeHead(200, { "Content-Type": "text/plain" })
-	const result = main(req.url.replace('/', ''))
+	const result = main('Singapore')
 	res.end(result)
 })
 
